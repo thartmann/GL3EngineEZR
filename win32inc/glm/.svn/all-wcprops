@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/thartmann/EZR_ss2011/!svn/ver/45/code/win32inc/glm
+END
+glm.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/thartmann/EZR_ss2011/!svn/ver/45/code/win32inc/glm/glm.hpp
+END
+ext.hpp
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/thartmann/EZR_ss2011/!svn/ver/45/code/win32inc/glm/ext.hpp
+END
+CMakeLists.txt
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/thartmann/EZR_ss2011/!svn/ver/45/code/win32inc/glm/CMakeLists.txt
+END

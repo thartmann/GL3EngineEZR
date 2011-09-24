@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="LPVApp" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/lpvapp" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../lpvapp" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add option="-DUNIX" />
+				</Compiler>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/lpvapp" prefix_auto="1" extension_auto="1" />
+				<Option working_dir="../lpvapp" />
+				<Option object_output="obj/Release/" />
+				<Option type="0" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+					<Add option="-DUNIX" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-DUNIX" />
+			<Add directory="/usr/include" />
+			<Add directory="/usr/local/include" />
+		</Compiler>
+		<Linker>
+			<Add library="GL" />
+			<Add library="GLU" />
+			<Add library="pthread" />
+			<Add library="Xxf86vm" />
+			<Add library="Xrandr" />
+			<Add library="glfw" />
+			<Add library="assimp" />
+			<Add directory="/usr/lib" />
+			<Add directory="/usr/local/lib" />
+		</Linker>
+		<Unit filename="Camera.cpp" />
+		<Unit filename="Camera.h" />
+		<Unit filename="LPVApp.cpp" />
+		<Unit filename="LPVApp.h" />
+		<Unit filename="Mesh.cpp" />
+		<Unit filename="Mesh.h" />
+		<Unit filename="MultipleRenderTarget.cpp" />
+		<Unit filename="MultipleRenderTarget.h" />
+		<Unit filename="Node.cpp" />
+		<Unit filename="Node.h" />
+		<Unit filename="Texture.cpp" />
+		<Unit filename="Texture.h" />
+		<Unit filename="common.h" />
+		<Unit filename="main.cpp" />
+		<Unit filename="main_unix.inl" />
+		<Unit filename="main_win.inl" />
+		<Unit filename="main_win.inl" />
+		<Unit filename="shader.cpp" />
+		<Unit filename="shader.h" />
+		<Unit filename="shader/Modelshader.frag" />
+		<Unit filename="shader/Modelshader.vert" />
+		<Unit filename="shader/outputFP.frag" />
+		<Unit filename="shader/outputVP.vert" />
+		<Unit filename="shader/simpleFP.frag" />
+		<Unit filename="shader/simpleVP.vert" />
+		<Extensions>
+			<code_completion />
+			<debugger />
+			<DoxyBlocks>
+				<comment_style block="3" line="2" />
+				<doxyfile_project />
+				<doxyfile_build extract_all="1" />
+				<doxyfile_warnings />
+				<doxyfile_output latex="1" />
+				<doxyfile_dot class_diagrams="1" have_dot="1" />
+				<general />
+			</DoxyBlocks>
+			<envvars />
+		</Extensions>
+	</Project>
+</CodeBlocks_project_file>
