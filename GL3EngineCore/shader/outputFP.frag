@@ -6,7 +6,7 @@ out vec4 color;
 
 ////textures for deferred shading
 uniform sampler2D colorMap;
-//uniform sampler2D positionMap:
+uniform sampler2D positionMap;
 uniform sampler2D normalMap;
 uniform sampler2D fluxMap;
 uniform sampler2D depthMap;
@@ -28,8 +28,8 @@ void main(){
 		}
 		case 2: //show positionMap
 		{
-		    //color = vec4(texture(positionMap, UV).rgb, 1.0f);
-			//break;
+		    color = vec4(texture(positionMap, UV).rgb, 1.0f);
+			break;
 		}
 		case 3: //show normalMap
 		{
