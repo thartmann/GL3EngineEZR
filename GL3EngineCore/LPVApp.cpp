@@ -66,9 +66,9 @@ void LPVApp::RenderScene(void)
 	
 	m_rootNode->Render(m_nodeTexLoc, m_modelMatrixUniformLocation);
 
-	glDisableVertexAttribArray(0);
-	glDisableVertexAttribArray(1);
-	glDisableVertexAttribArray(2);
+//	glDisableVertexAttribArray(0);
+//	glDisableVertexAttribArray(1);
+//	glDisableVertexAttribArray(2);
 
 	////draw texture from render target into full screen quad
 	//glBindFramebuffer(GL_FRAMEBUFFER, 0);
