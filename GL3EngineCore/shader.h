@@ -65,7 +65,7 @@ protected:
 	 *\return	true on success
 	 */
 	bool InitializeShader(void);
-
+	void printProgramInfoLog();
 
 private:
 	//shader code

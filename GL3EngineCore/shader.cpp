@@ -1,5 +1,7 @@
 #include "shader.h"
-
+#include <iostream>
+#include <string>
+#include <cassert>
 
 Shader::Shader(std::string vpFile, std::string fpFile)
 {
@@ -120,6 +122,25 @@ bool Shader::InitializeShader(void)
 	glAttachShader(m_shaderID, m_shaderFP);
 
 	glLinkProgram(m_shaderID);
+	printProgramInfoLog();
 
 	return CheckOpenGLError("initialize shaders in shader");
+}
+
+void Shader::printProgramInfoLog() {
+  int infologLen = 0;
+  glGetProgramiv(m_shaderID, GL_INFO_LOG_LENGTH, &infologLen);
+  if (infologLen > 1) {
+    GLchar * infoLog = new GLchar[infologLen];
+    if (infoLog == NULL) {
+      std::cout << "Could not allocate InfoLog buffer";
+    }
+    int charsWritten = 0;
+    glGetProgramInfoLog(m_shaderID, infologLen, &charsWritten, infoLog);
+    std::string shaderlog = infoLog;
+    free(infoLog);
+    std::cout << "Program Log"<< shaderlog << "\n";
+  } else {
+    std::cout << "Program compiled" << "\n";
+  }
 }
