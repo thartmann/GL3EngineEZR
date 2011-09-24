@@ -117,7 +117,15 @@ void GLFWCALL KeyHandler(int key, int action)
 				break;
 			}
 		case GLFW_KEY_KP_5:
+      {
+        myLPVApp->showRenderTarget( 5 );
+        break;
+      }
 		case GLFW_KEY_KP_6:
+      {
+        myLPVApp->showRenderTarget( 6 );
+        break;
+      }
 		case GLFW_KEY_KP_7:
 		case GLFW_KEY_KP_8:
 		case GLFW_KEY_KP_9:
