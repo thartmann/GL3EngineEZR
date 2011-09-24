@@ -9,7 +9,7 @@
 
 #include <ctime>
 #include <GL/glfw.h>
-
+#include "Timer.h"
 LPVApp *myLPVApp;
 
 bool m_running;
@@ -18,10 +18,7 @@ int m_windowWidth;
 int m_windowHeight;
 
 int filling = 1;
-clock_t time_start;
-clock_t time_current;
-clock_t time_diff;
-clock_t time_last;
+Timer timer;
 float tslf = 0.0f;
 bool mousedown = false;
 int mousex = 0;
@@ -253,8 +250,7 @@ void GLFWCALL MouseWheelHandler(int pos)
  */
 int InitApp()
 {
-	time_start = clock();
-	time_last = time_start;
+	timer = Timer();
  	myLPVApp = new LPVApp();
 
 	m_windowWidth = 800;
@@ -320,12 +316,9 @@ int MainLoop()
     while(m_running)
     {
     	//time prototype
-		time_current = clock();
-		time_diff = time_current - time_last;
-		time_last = time_current;
-		tslf = time_diff *0.001;/// CLOCKS_PER_SEC;// timesincelastframe in milliseconds
-
-    	glfwPollEvents();
+      timer.updateFPS();
+		tslf = timer.getSPF() *0.01;
+    glfwPollEvents();
 
 		if(mousedown)
 		{
