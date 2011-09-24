@@ -253,6 +253,8 @@ void GLFWCALL MouseWheelHandler(int pos)
  */
 int InitApp()
 {
+	time_start = clock();
+	time_last = time_start;
  	myLPVApp = new LPVApp();
 
 	m_windowWidth = 800;
