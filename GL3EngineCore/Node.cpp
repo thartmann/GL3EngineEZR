@@ -130,19 +130,20 @@ void Node::Render(GLint texLoc, GLint matLoc)
 
 		glActiveTexture(GL_TEXTURE0 + m_Texture->getUnit());
 		glBindTexture(GL_TEXTURE_2D, m_Texture->getID());
+		CheckOpenGLError("binding texture in node");
 
 		m_Mesh->draw();
 
 		glBindTexture(GL_TEXTURE_2D, 0);
-		
+
 		m_Shader->UnBindShader();
-
-		for (GLuint i = 0; i < m_children.size(); i++)
-		{
-			m_children[i]->Render(texLoc, matLoc, transform_global);
-		}
-
 	}
+	for (GLuint i = 0; i < m_children.size(); i++)
+	{
+		m_children[i]->Render(texLoc, matLoc, transform_global);
+		CheckOpenGLError("render children in node");
+	}
+
 }
 
 void Node::Render(GLint texLoc, GLint matLoc, glm::mat4 const &transform)
@@ -153,7 +154,7 @@ void Node::Render(GLint texLoc, GLint matLoc, glm::mat4 const &transform)
 	{
 		m_Shader->BindShader();
 		glUniformMatrix4fv(matLoc, 1, GL_FALSE, glm::value_ptr(transform_global));		
-			
+
 		glUniform1i(texLoc, m_Texture->getUnit());
 		CheckOpenGLError("passing uniform in node");
 
