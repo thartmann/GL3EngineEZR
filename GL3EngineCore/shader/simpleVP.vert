@@ -1,8 +1,4 @@
 #version 330
-uniform mat4 ModelMatrix;
-uniform mat4 ViewMatrix;
-uniform mat4 ProjectionMatrix;
-
 // Vertex position in worldspace
 layout(location = 0) in vec3 vVertex;
 
@@ -16,6 +12,10 @@ layout(location = 2) in vec3 vNormal;
 out vec2 UV;
 out vec3 vertPosition;
 out vec3 vertNormals;
+
+uniform mat4 ModelMatrix;
+uniform mat4 ViewMatrix;
+uniform mat4 ProjectionMatrix;
 
 void main()
 {
