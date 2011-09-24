@@ -120,7 +120,7 @@ void Node::Render(GLint texLoc, GLint matLoc)
 {
 	transform_global = transform_local;
 
-	if (m_Mesh && m_Shader && m_Texture)
+	if (m_Mesh != 0 && m_Shader != 0 && m_Texture != 0)
 	{
 		m_Shader->BindShader();
 		glUniformMatrix4fv(matLoc, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(transform_global));
@@ -150,7 +150,7 @@ void Node::Render(GLint texLoc, GLint matLoc, glm::mat4 const &transform)
 {
 	transform_global = transform * transform_local;
 
-	if (m_Mesh && m_Shader && m_Texture)
+	if (m_Mesh != 0 && m_Shader != 0 && m_Texture != 0)
 	{
 		m_Shader->BindShader();
 		glUniformMatrix4fv(matLoc, 1, GL_FALSE, glm::value_ptr(transform_global));		
