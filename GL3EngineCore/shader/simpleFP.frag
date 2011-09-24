@@ -15,10 +15,10 @@ uniform sampler2D assignedtexture;
 
 void main(void)
 {
-	vFragColor = vec3(0.0f, 1.0f, 0.0f);
-	//vFragColor = texture( assignedtexture, UV ).rgb;
+	vFragColor = texture(assignedtexture, UV).rgb;
+	//vFragColor = vec3(0.0f, 1.0f, 0.0f);
+	vWorldCoord = vertPosition;
 	vWorldCoord = vec3(1.0f, 0.0f, 1.0f);
-	//vWorldCoord = vertPosition;
 	vNormals = vertNormals;
 	vFlux = vec3( 0.0, 0.0, 1.0 );
 }
