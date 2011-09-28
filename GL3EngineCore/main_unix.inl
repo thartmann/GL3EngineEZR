@@ -8,7 +8,7 @@
 #include "LPVApp.h"
 
 #include <ctime>
-#include <GL/glfw.h>
+
 #include "Timer.h"
 LPVApp *myLPVApp;
 

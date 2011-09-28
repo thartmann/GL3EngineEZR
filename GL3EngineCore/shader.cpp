@@ -1,6 +1,4 @@
 #include "shader.h"
-#include <iostream>
-#include <string>
 #include <cassert>
 
 Shader::Shader(std::string vpFile, std::string fpFile)
@@ -133,14 +131,14 @@ void Shader::printProgramInfoLog() {
   if (infologLen > 1) {
     GLchar * infoLog = new GLchar[infologLen];
     if (infoLog == NULL) {
-      std::cout << "Could not allocate InfoLog buffer";
+      std::cout << "[ERROR] Could not allocate InfoLog buffer";
     }
     int charsWritten = 0;
     glGetProgramInfoLog(m_shaderID, infologLen, &charsWritten, infoLog);
     std::string shaderlog = infoLog;
     free(infoLog);
-    std::cout << "Program Log"<< shaderlog << "\n";
+    std::cout << "[DEBUG] Program Log "<< shaderlog << "\n";
   } else {
-    std::cout << "Program compiled" << "\n";
+    std::cout << "[DEBUG] Program compiled" << "\n";
   }
 }

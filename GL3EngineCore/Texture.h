@@ -7,10 +7,12 @@
 class Texture{
 public:
 	Texture();
+	Texture(GLuint texID, GLuint texUnit, GLuint texSampler);
 	virtual ~Texture();
 	bool LoadTGA(std::string name);
 	GLuint getID();
 	GLuint getUnit();
+	GLuint getSampler();
 
 private:
 
@@ -45,6 +47,7 @@ private:
 	data m_TexData;
 
 	GLuint m_textureUnit;
+	GLuint m_texSampler;
 	TGAHeader tgaheader;
 	TGA tga;
 

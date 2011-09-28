@@ -39,6 +39,7 @@
 #include <sstream>
 #include <string>
 #include <vector>
+#include <random>
 
 #define TS_LOCAL 0
 #define TS_GLOBAL 1
@@ -82,5 +83,14 @@ inline bool CheckOpenGLError(std::string identifier)
     }
 }
 
+inline float random(float a, float b)
+{
+	return ((b - a) * ((float)rand() / RAND_MAX)) + a;
+}
+
+inline float lerp(float y1, float y2, float mu)
+{
+   return y1 * (1 - mu) + y2 * mu;
+}
 
 #endif // COMMON_H_INCLUDED

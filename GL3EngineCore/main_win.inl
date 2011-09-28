@@ -44,21 +44,38 @@ void OnRender() {
 	time_current = clock();
 	time_diff = time_current - time_last;
 	time_last = time_current;
-	tslf = time_diff *0.001;/// CLOCKS_PER_SEC;// timesincelastframe in milliseconds
+	tslf = float(time_diff *0.001);/// CLOCKS_PER_SEC;// timesincelastframe in milliseconds
 
 	//switch render Targets
-	if(KeyDown['1'])myLPVApp->showRenderTarget(0);
-	if(KeyDown['2'])myLPVApp->showRenderTarget(1);
-	if(KeyDown['3'])myLPVApp->showRenderTarget(2);
-	if(KeyDown['4'])myLPVApp->showRenderTarget(3);
-	if(KeyDown['5'])myLPVApp->showRenderTarget(4);
-	if(KeyDown['6'])myLPVApp->showRenderTarget(5);
+	if(KeyDown['1'])myLPVApp->showRenderTarget(0); //show final rendering
+	if(KeyDown['2'])myLPVApp->showRenderTarget(1); //show colorMap
+	if(KeyDown['3'])myLPVApp->showRenderTarget(2); //show positionMap
+	if(KeyDown['4'])myLPVApp->showRenderTarget(3); //show normalMap
+	if(KeyDown['5'])myLPVApp->showRenderTarget(4); //show fluxMap
+	if(KeyDown['6'])myLPVApp->showRenderTarget(5); //show depthMap
+	if(KeyDown['7'])myLPVApp->showRenderTarget(6); //show ssao
+
 
 	//input handling
 	if(KeyDown['w'])myLPVApp->m_Camera.camMove(glm::vec3(0.0f, 0.0f , 1.0f) * tslf, TS_LOCAL);
 	if(KeyDown['s'])myLPVApp->m_Camera.camMove(glm::vec3(0.0f, 0.0f , -1.0f) * tslf, TS_LOCAL);
 	if(KeyDown['a'])myLPVApp->m_Camera.camMove(glm::vec3(1.0f, 0.0f , 0.0f) * tslf, TS_LOCAL);
 	if(KeyDown['d'])myLPVApp->m_Camera.camMove(glm::vec3(-1.0f, 0.0f , 0.0f) * tslf, TS_LOCAL);
+
+	/*if(SpecialKeyDown[GLUT_KEY_LEFT])myLPVApp->m_ls.updatePositionVector(glm::vec3(0.01, 0.0, 0.0));
+	if(SpecialKeyDown[GLUT_KEY_RIGHT])myLPVApp->m_ls.updatePositionVector(glm::vec3(-0.01, 0.0, 0.0));
+	if(SpecialKeyDown[GLUT_KEY_DOWN])myLPVApp->m_ls.updatePositionVector(glm::vec3(0.0, 0.0, 0.01));
+	if(SpecialKeyDown[GLUT_KEY_UP])myLPVApp->m_ls.updatePositionVector(glm::vec3(0.0, 0.0, -0.01));*/
+
+	if(SpecialKeyDown[GLUT_KEY_LEFT])myLPVApp->changeLightPosition(glm::vec3(1.0, 0.0, 0.0)*tslf);
+	if(SpecialKeyDown[GLUT_KEY_RIGHT])myLPVApp->changeLightPosition(glm::vec3(-1.0, 0.0, 0.0)*tslf);
+	if(SpecialKeyDown[GLUT_KEY_DOWN])myLPVApp->changeLightPosition(glm::vec3(0.0, 1.0, 0.0)*tslf);
+	if(SpecialKeyDown[GLUT_KEY_UP])myLPVApp->changeLightPosition(glm::vec3(0.0, -1.0, 0.0)*tslf);
+
+	if(KeyDown['y'])myLPVApp->m_ls.updateDirectionVector(glm::vec3(0.01, 0.0, 0.0));
+	if(KeyDown['x'])myLPVApp->m_ls.updateDirectionVector(glm::vec3(-0.01, 0.0, 0.0));
+	if(KeyDown['c'])myLPVApp->m_ls.updateDirectionVector(glm::vec3(0.0, 0.0, 0.01));
+	if(KeyDown['v'])myLPVApp->m_ls.updateDirectionVector(glm::vec3(0.0, 0.0, -0.01));
 
 	if(mousedown)
 	{

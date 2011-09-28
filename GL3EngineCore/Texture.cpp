@@ -5,6 +5,13 @@ Texture::Texture()
 	m_textureUnit = 0;
 }
 
+Texture::Texture(GLuint texID, GLuint texUnit, GLuint texSampler)
+{
+	m_textureUnit = texUnit;
+	m_TexData.texID = texID;
+	m_texSampler = texSampler;
+}
+
 Texture::~Texture()
 {
 	if(m_TexData.imageData != NULL)											// If imagedata has data in it
@@ -16,7 +23,7 @@ Texture::~Texture()
 bool Texture::LoadTGA(std::string filename)
 {
 	FILE * fTGA;															// File pointer to texture file
-	fTGA = fopen(filename.c_str(), "rb");											// Open file for reading
+	fopen_s(&fTGA,filename.c_str(), "rb");									// Open file for reading
 
 	if(fTGA == NULL)														// If it didn't open....
 	{
@@ -62,6 +69,11 @@ GLuint Texture::getID()
 GLuint Texture::getUnit()
 {
 	return m_textureUnit;
+}
+
+GLuint Texture::getSampler()
+{
+	return m_texSampler;
 }
 
 bool Texture::LoadUncompressedTGA(const char * filename, FILE * fTGA)				// Load an uncompressed TGA (note, much of this code is based on NeHe's
@@ -351,6 +363,12 @@ bool Texture::CreateGLtexture()
 	glGenerateMipmap(GL_TEXTURE_2D);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glGenSamplers(1, &m_texSampler);
+	glSamplerParameteri(m_texSampler, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glSamplerParameteri(m_texSampler, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glSamplerParameteri(m_texSampler, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glSamplerParameteri(m_texSampler, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 	return 0;
 }

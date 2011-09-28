@@ -32,7 +32,6 @@ public:
 	Node *getParent();
 
 	void nodeAttach(Mesh* mesh);
-	void nodeAttach(Shader* shader);
 	void nodeAttach(Texture* texture);
 
 	void nodeMove(glm::vec3 const &translation, GLuint tspace = TS_GLOBAL);
@@ -56,7 +55,6 @@ public:
 		std::vector<Node*> m_children;
 		Mesh *m_Mesh;
 		Texture *m_Texture;
-		Shader *m_Shader;
 };
 
 #endif // header guard 

@@ -8,7 +8,6 @@ Node::Node(const std::string name)
 	transform_global = glm::mat4(1.0);
 	m_Mesh = 0;
 	m_Texture = 0;
-	m_Shader = 0;
 }
 
 Node::~Node()
@@ -44,7 +43,7 @@ void Node::removeChild(Node *child)
 {
 	for(GLuint i = 0; i < m_children.size(); i++)
 	{
-		if(child->getNodeName().compare(m_children[i]->getNodeName()))
+		if(!child->getNodeName().compare(m_children[i]->getNodeName()))
 		{
 			m_children.erase(m_children.begin()+i);
 		}
@@ -55,7 +54,7 @@ Node *Node::getChildByName(const std::string name)
 {
 	for(GLuint i = 0; i < m_children.size(); i++)
 	{
-		if(name.compare(m_children[i]->getNodeName()))
+		if(!name.compare(m_children[i]->getNodeName()))
 		{
 			return m_children[i];
 		}
@@ -71,11 +70,6 @@ Node *Node::getParent()
 void Node::nodeAttach(Mesh* mesh)
 {
 	if(!m_Mesh)m_Mesh = mesh;
-}
-
-void Node::nodeAttach(Shader* shader)
-{
-	if(!m_Shader)m_Shader = shader;
 }
 
 void Node::nodeAttach(Texture* texture)
@@ -120,9 +114,9 @@ void Node::Render(GLint texLoc, GLint matLoc)
 {
 	transform_global = transform_local;
 
-	if (m_Mesh != 0 && m_Shader != 0 && m_Texture != 0)
+	if (m_Mesh != 0 && m_Texture != 0)
 	{
-		m_Shader->BindShader();
+		//m_Shader->BindShader();
 		glUniformMatrix4fv(matLoc, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(transform_global));
 
 		glUniform1i(texLoc, m_Texture->getUnit());
@@ -130,13 +124,14 @@ void Node::Render(GLint texLoc, GLint matLoc)
 
 		glActiveTexture(GL_TEXTURE0 + m_Texture->getUnit());
 		glBindTexture(GL_TEXTURE_2D, m_Texture->getID());
+		glBindSampler(m_Texture->getUnit(), m_Texture->getSampler());
 		CheckOpenGLError("binding texture in node");
 
 		m_Mesh->draw();
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		m_Shader->UnBindShader();
+		//m_Shader->UnBindShader();
 	}
 	for (GLuint i = 0; i < m_children.size(); i++)
 	{
@@ -150,9 +145,9 @@ void Node::Render(GLint texLoc, GLint matLoc, glm::mat4 const &transform)
 {
 	transform_global = transform * transform_local;
 
-	if (m_Mesh != 0 && m_Shader != 0 && m_Texture != 0)
+	if (m_Mesh != 0 && m_Texture != 0)
 	{
-		m_Shader->BindShader();
+		//m_Shader->BindShader();
 		glUniformMatrix4fv(matLoc, 1, GL_FALSE, glm::value_ptr(transform_global));		
 
 		glUniform1i(texLoc, m_Texture->getUnit());
@@ -165,6 +160,6 @@ void Node::Render(GLint texLoc, GLint matLoc, glm::mat4 const &transform)
 
 		glBindTexture(GL_TEXTURE_2D, 0);
 
-		m_Shader->UnBindShader();
+		//m_Shader->UnBindShader();
 	}
 }
