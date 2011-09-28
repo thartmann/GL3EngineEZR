@@ -45,14 +45,14 @@ float AmbientOcclusion()
 	
 	float res = 1.0;
 	float value = 0.0f;
-	for(float i = 1/600; i < 4/600; i+=i/600)
+	for(float i = 1.0/600.0; i < 4.0/600.0; i+=i/600.0)
 	{
 		value = texture(depthMap, vec2(UV.x, UV.y +i )).x;
 		if(value < res){ res = i;}
 	}
 	float ao = calculateOcclusion(res);
 
-	for(float i = 1/600; i < 4/600; i+=i/600)
+	for(float i = 1.0/600.0; i < 4.0/600.0; i+=i/600.0)
 	{
 		value = texture(depthMap, vec2(UV.x, UV.y -i)).x;
 		if(value < res){ res = i;}
@@ -60,7 +60,7 @@ float AmbientOcclusion()
 //	res = 0.0;
 	ao += calculateOcclusion(res);
 //float	ao = texture(depthMap, vec2(UV.x, UV.y-res )).x;
-	ao = ao/2;
+	ao = ao/2.0;
 
 	ao = clamp(ao, 0.0, 1.0);
 	return ao;
