@@ -202,14 +202,12 @@ void LPVApp::SetupScene(void)
 
     m_shader = new Shader("./shader/simpleVP.vert", "./shader/simpleFP.frag");
 
-	m_rootNode->nodeAttach(m_shader);
 
 	for(GLuint i = 0; i < 30; i++)
 	{
 		Node* node = new Node(("Dragon "+ i));
 		
 		node->nodeAttach(mesh);
-		node->nodeAttach(m_shader);
 
 		if(i%2)node->nodeMove(glm::vec3(1.0 * i,0.0,-1.0 * i));
 		else node->nodeMove(glm::vec3(-1.0 * i,0.0,-1.0 * i));
