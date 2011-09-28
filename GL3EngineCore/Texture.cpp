@@ -23,7 +23,7 @@ Texture::~Texture()
 bool Texture::LoadTGA(std::string filename)
 {
 	FILE * fTGA;															// File pointer to texture file
-	fopen_s(&fTGA,filename.c_str(), "rb");									// Open file for reading
+	fTGA = fopen(filename.c_str(), "rb");									// Open file for reading
 
 	if(fTGA == NULL)														// If it didn't open....
 	{
