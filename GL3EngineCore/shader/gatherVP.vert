@@ -10,8 +10,8 @@ layout(location = 2) in vec3 vNormal;
 
 // Output data will be interpolated for each fragment.
 out vec2 UV;
-out vec3 vertPosition;
-out vec3 vertNormals;
+out vec4 vertPosition;
+out vec4 vertNormals;
 out vec4 SM_tex_coord;
 
 uniform mat4 ModelMatrix;
@@ -22,9 +22,9 @@ uniform mat4 LightSpaceMatrix;
 void main()
 {
    //vSmoothColor = vec4(vColor,1);
-   gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vVertex,1.0f);
-   vertPosition = (ModelMatrix * vec4(vVertex,1)).xyz;
-   vertNormals = (ModelMatrix * vec4(vNormal,0)).xyz;
+   gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vVertex, 1.0f);
+   vertPosition = (ViewMatrix * ModelMatrix * vec4(vVertex, 1.0f));
+   vertNormals = (ViewMatrix * ModelMatrix * vec4(vNormal, 0.0f));
    UV = vUV;
-   SM_tex_coord = LightSpaceMatrix * ModelMatrix * vec4(vVertex,1.0f);
+   SM_tex_coord = LightSpaceMatrix * ModelMatrix * vec4(vVertex, 1.0f);
 }

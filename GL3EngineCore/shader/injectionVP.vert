@@ -10,8 +10,8 @@ layout(location = 2) in vec3 vNormal;
 
 // Output data will be interpolated for each fragment.
 out vec2 UV;
-out vec3 vertPosition;
-out vec3 vertNormals;
+out vec4 vertPosition;
+out vec4 vertNormals;
 
 uniform mat4 ModelMatrix;
 uniform mat4 LightViewMatrix;
@@ -20,7 +20,7 @@ uniform mat4 LightProjectionMatrix;
 void main()
 {
    gl_Position = LightProjectionMatrix * LightViewMatrix * ModelMatrix * vec4(vVertex,1);
-   vertPosition = (LightViewMatrix * ModelMatrix * vec4(vVertex,1)).xyz;
-   vertNormals = (LightViewMatrix * ModelMatrix * vec4(vNormal,0)).xyz;
+   vertPosition = (LightViewMatrix * ModelMatrix * vec4(vVertex,1));
+   vertNormals = (LightViewMatrix * ModelMatrix * vec4(vNormal,0));
    UV = vUV;
 }
