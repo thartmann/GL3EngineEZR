@@ -28,7 +28,7 @@ void MultipleRenderTarget::createMRT( int width, int height)
 
 	for( int i = 0; i < 4; i++)
 	{
-		glBindTexture(GL_TEXTURE_2D, mrtTexture[i] );
+		glBindTexture(GL_TEXTURE_2D, mrtTexture[i]);
 
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
@@ -42,13 +42,15 @@ void MultipleRenderTarget::createMRT( int width, int height)
 	}
 
 	glBindTexture( GL_TEXTURE_2D, mrtTexture[4] );
-	glTexImage2D(GL_TEXTURE_2D, 0,GL_DEPTH_COMPONENT32, width, height, 0,GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT32, width, height, 0, GL_DEPTH_COMPONENT, GL_FLOAT, 0);
+	CheckOpenGLError("createMRT() bind depth");
 
 	// filtering is needed, but need to be checked !
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	CheckOpenGLError("createMRT() post texparam");
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -58,18 +60,22 @@ void MultipleRenderTarget::createMRT( int width, int height)
 	glSamplerParameteri(mrtSampler, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glSamplerParameteri(mrtSampler, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glSamplerParameteri(mrtSampler, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	CheckOpenGLError("createMRT() post sampler");
 
 	// Depthbuffer, need to be checked	
 	glGenRenderbuffers(1, &dbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, dbo);
 	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width, height);
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, dbo);
+	CheckOpenGLError("createMRT() post renderbuffer");
 
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, mrtTexture[0], 0);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, mrtTexture[1], 0);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, mrtTexture[2], 0);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT3, mrtTexture[3], 0);
 	glFramebufferTexture(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, mrtTexture[4], 0);
+
+	CheckOpenGLError("createMRT() pre draw");
 
 	GLenum DrawBuffers[4] = 
 	{
@@ -87,11 +93,11 @@ void MultipleRenderTarget::createFSQ()
 {
 	static const GLfloat g_quad_vertex_buffer_data[] = {
 	    -1.0f, -1.0f, 0.0f,
-	    1.0f, -1.0f, 0.0f,
+	     1.0f, -1.0f, 0.0f,
 	    -1.0f,  1.0f, 0.0f,
 	    -1.0f,  1.0f, 0.0f,
-	    1.0f, -1.0f, 0.0f,
-	    1.0f,  1.0f, 0.0f,
+	     1.0f, -1.0f, 0.0f,
+	     1.0f,  1.0f, 0.0f,
 	};
 
 	glGenBuffers(1, &quad_vertexbuffer);

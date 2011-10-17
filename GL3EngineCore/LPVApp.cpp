@@ -37,9 +37,9 @@ int LPVApp::Initialize(void)
 	m_Camera.camPerspective(60.0f, (float)m_windowWidth / (float)m_windowHeight, 0.5f, 20.0f);
 
 	//generate random Texture
-	GLfloat noise[12288];
+	GLfloat noise[48];
 
-	for (GLuint i = 0; i < 12288; ++i)
+	for (GLuint i = 0; i < 48; ++i)
 	{
 		glm::vec3 randVec(random(-1.0f, 1.0f), random(-1.0f, 1.0f), 0.0f);
 		randVec = glm::normalize(randVec);
@@ -55,7 +55,7 @@ int LPVApp::Initialize(void)
 	glGenTextures(1, &m_randomMapID);
 
 	glBindTexture( GL_TEXTURE_2D, m_randomMapID );
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 64, 64, 0, GL_RGB, GL_FLOAT, noise);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 4, 4, 0, GL_RGB, GL_FLOAT, noise);
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
@@ -165,7 +165,7 @@ void LPVApp::RenderScene(void)
 
 	m_outputShader->BindShader();
 
-	//glUniformMatrix4fv(m_viewMatForSSAOLoc, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(m_Camera.getView()));
+	glUniformMatrix4fv(m_projMatForSSAOLoc, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(m_Camera.getProjection()));
 
 	//switch to tell shader wich texture to render
 	glUniform1i(m_outputSwitch, rtID);
@@ -176,7 +176,8 @@ void LPVApp::RenderScene(void)
 
 	CheckOpenGLError("setting uniforms");
 
-	if (!m_outputShader->BindShader()) std::cout << "[ERROR] m_outputShader->BindShader() in RenderScene()!"  << std::endl;
+	m_outputShader->BindShader();
+	CheckOpenGLError("m_outputShader->BindShader() in RenderScene()");
 
 	//activate and bind textures
 	for (size_t i = 0; i < 5; i++)
@@ -286,7 +287,7 @@ void LPVApp::SetupScene(void)
 	m_light_mrt->createMRT(1024,1024);
 
 	//RENDERSHADER
-	m_shader = new Shader("./shader/simpleVP.vert", "./shader/simpleFP.frag");
+	m_shader = new Shader("./shader/gatherVP.vert", "./shader/gatherFP.frag");
 	m_shader->BindShader();
 
    	m_modelMatrixUniformLocation = glGetUniformLocation(m_shader->GetShaderID(), "ModelMatrix");
@@ -304,7 +305,7 @@ void LPVApp::SetupScene(void)
 
 	
 	//INJECTIONSHADER
-	m_LightInjectionShader = new Shader("./shader/NotSimpleVP.vert", "./shader/NotSimpleFP.frag");
+	m_LightInjectionShader = new Shader("./shader/injectionVP.vert", "./shader/injectionFP.frag");
 	m_LightInjectionShader->BindShader();
 
 	m_modelMatrixUniformLocation2 = glGetUniformLocation(m_LightInjectionShader->GetShaderID(), "ModelMatrix");
@@ -315,10 +316,11 @@ void LPVApp::SetupScene(void)
 	m_LightInjectionShader->UnBindShader();
 
 	//OUTPUTSHADER
-	m_outputShader = new Shader("./shader/outputVP.vert", "./shader/outputFP.frag");
+	m_outputShader = new Shader("./shader/finalVP.vert", "./shader/finalFP.frag");
 
 	//get matrix location
-	//m_viewMatForSSAOLoc = glGetUniformLocation(m_outputShader->GetShaderID(), "viewMatrix");
+	m_projMatForSSAOLoc = glGetUniformLocation(m_outputShader->GetShaderID(), "projMat");
+	CheckOpenGLError("getting projMatForSSAO uniform location");
 
 	//get texture locations
 	m_colorMapLocation = glGetUniformLocation(m_outputShader->GetShaderID(), "colorMap");
@@ -342,7 +344,8 @@ void LPVApp::SetupScene(void)
 	m_sampleKernelLoc = glGetUniformLocation(m_outputShader->GetShaderID(), "sampleKernel");
 	CheckOpenGLError("getting sample kernel uniform location");
 
-	if (!m_outputShader->BindShader()) std::cout << "[ERROR] m_outputShader->BindShader() in SetupScene()!"  << std::endl;
+	m_outputShader->BindShader();
+	CheckOpenGLError("m_outputShader->BindShader() in SetupScene()");
 
 	//pass textures to shader
 	glUniform1i(m_colorMapLocation, m_mrt->getTextureUnit(0));

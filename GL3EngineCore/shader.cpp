@@ -3,6 +3,16 @@
 
 Shader::Shader(std::string vpFile, std::string fpFile)
 {
+	size_t startPos = 0;
+	startPos = vpFile.find_last_of('/');
+	if (startPos == std::string::npos) startPos = vpFile.find_last_of('\\');
+	if (startPos == std::string::npos) startPos = 0;
+	size_t endPos = 0;
+	endPos = vpFile.find_last_of("VP.");
+	if (endPos == std::string::npos) endPos = vpFile.find("vp.");
+	std::string shaderName = vpFile.substr(startPos + 1, endPos - startPos - 3);
+	std::cout << "[DEBUG] Initializing shader: " << shaderName << std::endl;
+
 	m_vp.assign(LoadShaderProgram(vpFile));
 	m_gp.clear();
 	m_fp.assign(LoadShaderProgram(fpFile));
@@ -42,13 +52,6 @@ bool Shader::BindShader(void)
 bool Shader::UnBindShader(void)
 {
 	glUseProgram(0);
-
-	//glDetachShader(m_shaderID, m_shaderVP);
-	//if (!m_gp.empty())
-	//{
-	//	glDetachShader(m_shaderID, m_shaderGP);
-	//}
-	//glDetachShader(m_shaderID, m_shaderFP);
 
 	return CheckOpenGLError("unbind shader in shader");
 }

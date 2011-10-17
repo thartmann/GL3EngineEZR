@@ -126,7 +126,7 @@ class LPVApp
 		GLuint m_sampleKernelSize;
 		GLuint m_sampleKernelLoc;
 
-		//GLuint m_viewMatForSSAOLoc;
+		GLuint m_projMatForSSAOLoc;
 		
 		float *m_lightArray;
 };
