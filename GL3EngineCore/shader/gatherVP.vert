@@ -27,7 +27,7 @@ uniform float farPlane;
 void main()
 {
    gl_Position = ProjectionMatrix * ViewMatrix * ModelMatrix * vec4(vVertex, 1.0);
-   vertPosition = (ModelMatrix * vec4(vVertex, 1.0));
+   vertPosition = ViewMatrix * ModelMatrix * vec4(vVertex, 1.0);
    vertNormals = normalMat * vNormal;
    vertDepth = gl_Position.z * gl_Position.w / farPlane;
    UV = vUV;

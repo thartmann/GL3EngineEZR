@@ -30,11 +30,11 @@ float rad = 16.0;
 //ssao will now be based on: http://www.john-chapman.net/content.php?id=8
 float AmbientOcclusion()
 {
-	vec3 origin = texture(positionMap, UV).rgb;
+	vec3 origin = texture(positionMap, UV).rgb * 2.0 - 1.0;
 	vec3 normal = texture(normalMap, UV).rgb * 2.0 - 1.0;
 	normal = normalize(normal);
 
-	vec3 randVec = texture(randMap, UV * (float(viewport) / 4.0)).rgb * 2.0 - 1.0;
+	vec3 randVec = texture(randMap, UV * (viewport / 4.0)).rgb * 2.0 - 1.0;
 
 	vec3 tangent = normalize(randVec - normal * dot(randVec, normal));
 	vec3 bitangent = cross(normal, tangent);
@@ -61,7 +61,7 @@ float AmbientOcclusion()
 		float sampleDepth = texture(depthMap, offset.xy).r;
         
 		//range check & accumulate:
-		float range = abs(origin.z - sampleDepth) < rad ? 1.0 : 0.0;
+		float range = abs(depth - sampleDepth) < rad ? 1.0 : 0.0;
         ao += (sampleDepth <= aosample.z ? 1.0 : 0.0) * range;
     }
 

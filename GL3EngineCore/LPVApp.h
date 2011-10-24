@@ -130,7 +130,7 @@ class LPVApp
 		GLuint m_sampleKernelLoc;
 
 		GLuint m_projMatForSSAOLoc;
-		GLuint m_viewMatForSSAOLoc;
+		//GLuint m_viewMatForSSAOLoc;
 
 		GLuint m_farPlaneLoc;
 		

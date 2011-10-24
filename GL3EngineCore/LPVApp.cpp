@@ -165,13 +165,12 @@ void LPVApp::RenderScene(void)
 	m_outputShader->BindShader();
 
 	glUniformMatrix4fv(m_projMatForSSAOLoc, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(m_Camera.getProjection()));
-	glUniformMatrix4fv(m_viewMatForSSAOLoc, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(m_Camera.getView()));
+	//glUniformMatrix4fv(m_viewMatForSSAOLoc, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(m_Camera.getView()));
 
 	//switch to tell shader wich texture to render
 	glUniform1i(m_outputSwitch, rtID);
 
 	//uniform to pass viewport dimensions
-	GLint viewportDim[2] = {m_windowWidth, m_windowHeight};
 	glUniform2f(m_viewportDimensionLoc, (float)m_windowWidth, (float)m_windowHeight);
 
 	CheckOpenGLError("setting uniforms");
@@ -327,8 +326,8 @@ void LPVApp::SetupScene(void)
 	m_projMatForSSAOLoc = glGetUniformLocation(m_outputShader->GetShaderID(), "projMat");
 	CheckOpenGLError("getting projMatForSSAO uniform location");
 
-	m_viewMatForSSAOLoc = glGetUniformLocation(m_outputShader->GetShaderID(), "viewMat");
-	CheckOpenGLError("getting viewMatForSSAO uniform location");
+	//m_viewMatForSSAOLoc = glGetUniformLocation(m_outputShader->GetShaderID(), "viewMat");
+	//CheckOpenGLError("getting viewMatForSSAO uniform location");
 
 	//get texture locations
 	m_colorMapLocation = glGetUniformLocation(m_outputShader->GetShaderID(), "colorMap");
