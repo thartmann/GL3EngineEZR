@@ -16,10 +16,14 @@ public:
 
 	glm::mat4 getProjection();
 	glm::mat4 getView();
+
+	float getFar();
 	
 private:
 	glm::mat4 m_transform;
 	glm::mat4 m_projection;
+
+	float m_far;
 	
 };
 

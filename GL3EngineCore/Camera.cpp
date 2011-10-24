@@ -2,8 +2,9 @@
 
 Camera::Camera()
 {
+	m_far = 100.0;
 	m_transform = glm::core::type::mat4(1.0f);
-	m_projection = glm::gtc::matrix_transform::perspective(45.0f, 1.0f, 0.1f, 100.0f);
+	m_projection = glm::gtc::matrix_transform::perspective(45.0f, 1.0f, 0.1f, m_far);
 }
 
 Camera::~Camera(){
@@ -65,4 +66,9 @@ glm::mat4 Camera::getView()
 {
 	return m_transform;
 }
-	
+
+
+float Camera::getFar()
+{
+	return m_far;
+}
