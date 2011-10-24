@@ -3,14 +3,16 @@
 // Interpolated values from the vertex shaders
 in vec2 UV;
 in vec4 vertPosition;
-in vec4 vertNormals;
+in vec3 vertNormals;
 in vec4 SM_tex_coord;
+in float vertDepth;
 
 // FragmentColor
 layout(location = 0 ) out vec4 vFragColor;
 layout(location = 1 ) out vec4 vViewCoord;
 layout(location = 2 ) out vec4 vViewNormals;
 layout(location = 3 ) out vec4 vFlux;
+layout(location = 4 ) out vec4 vDepth;
 
 uniform sampler2D shadowMap;
 uniform sampler2D assignedtexture;
@@ -36,19 +38,21 @@ void main(void)
 	
 
 	vViewCoord = vertPosition;
-	vViewNormals = vertNormals;
-	vFlux = vec4( 0.0f, 0.0f, 1.0f, 1.0f );
+	vViewNormals = vec4(normalize(vertNormals), 1.0);
+	vFlux = vec4( 0.0, 0.0, 1.0, 1.0 );
 
 	// note the perspective division!
 	vec3 tex_coords = SM_tex_coord.xyz / SM_tex_coord.w;
 	// read depth value from shadow map
 	float depth = texture2D(shadowMap, tex_coords.xy).r;
-	float z_diff = tex_coords.z - (depth + 0.007f);
-	bool inShadow = ((depth + 0.007f) < (tex_coords.z)) ? true : false;
-	if(tex_coords.x > 1.0f || tex_coords.x < 0.0f) inShadow = true;
-	if(tex_coords.y > 1.0f || tex_coords.y < 0.0f) inShadow = true;
+	float z_diff = tex_coords.z - (depth + 0.007);
+	bool inShadow = ((depth + 0.007) < (tex_coords.z)) ? true : false;
+	if(tex_coords.x > 1.0 || tex_coords.x < 0.0) inShadow = true;
+	if(tex_coords.y > 1.0 || tex_coords.y < 0.0) inShadow = true;
 
 	vec3 tempCol = texture2D( assignedtexture, UV ).rgb * spotLambertTerm * K * m_lightArray[7].x;
-	vFragColor = vec4(tempCol, 1.0f);
-	if(inShadow) vFragColor *= min(z_diff, 1.0f);
+	vFragColor = vec4(tempCol, 1.0);
+	if(inShadow) vFragColor *= min(z_diff, 1.0);
+
+	vDepth = vec4(vertDepth, vertDepth, vertDepth, 1.0);
 }

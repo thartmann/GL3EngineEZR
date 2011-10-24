@@ -3,7 +3,7 @@
 // Interpolated values from the vertex shaders
 in vec2 UV;
 in vec4 vertPosition;
-in vec4 vertNormals;
+in vec3 vertNormals;
 
 // FragmentColor
 layout(location = 0 ) out vec4 vFragColor;
@@ -18,6 +18,6 @@ void main(void)
 {
 	vFragColor = texture(meshtexture, UV);
 	vViewCoord = vertPosition;
-	vViewNormals = vertNormals;
-	vFlux = vec4(0.0f, 0.0f, 1.0f, 1.0f);
+	vViewNormals = vec4(normalize(vertNormals), 1.0);
+	vFlux = vec4(0.0, 0.0, 1.0, 1.0);
 }

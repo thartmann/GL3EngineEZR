@@ -5,6 +5,7 @@ in vec2 UV;
 out vec4 color;
 
 uniform mat4 projMat;
+uniform mat4 viewMat;
 
 ////textures for deferred shading
 uniform sampler2D colorMap;
@@ -24,16 +25,16 @@ uniform vec2 viewport;
 uniform vec3 sampleKernel[16];
 
 //values to tweak ssao
-float rad = 256.0f;
+float rad = 16.0;
 
 //ssao will now be based on: http://www.john-chapman.net/content.php?id=8
 float AmbientOcclusion()
 {
 	vec3 origin = texture(positionMap, UV).rgb;
-	vec3 normal = texture(normalMap, UV).rgb * 2.0f - 1.0f;
+	vec3 normal = texture(normalMap, UV).rgb * 2.0 - 1.0;
 	normal = normalize(normal);
 
-	vec3 randVec = texture(randMap, UV * (float(viewport) / 4.0f)).rgb * 2.0f - 1.0f;
+	vec3 randVec = texture(randMap, UV * (float(viewport) / 4.0)).rgb * 2.0 - 1.0;
 
 	vec3 tangent = normalize(randVec - normal * dot(randVec, normal));
 	vec3 bitangent = cross(normal, tangent);
@@ -42,7 +43,7 @@ float AmbientOcclusion()
 
 	float depth = texture(depthMap, UV).r;
 
-	float ao = 0.0f;
+	float ao = 0.0;
 
 	for (int i = 0; i < 16; i++)
 	{
@@ -51,22 +52,22 @@ float AmbientOcclusion()
 		aosample = aosample * rad + origin;
 
 		//project sample position
-		vec4 offset = vec4(aosample, 1.0f);
+		vec4 offset = vec4(aosample, 1.0);
         offset = projMat * offset;
         offset.xy /= offset.w;
-        offset.xy = offset.xy * 0.5f + 0.5f;
+        offset.xy = offset.xy * 0.5 + 0.5;
         
 		//get sample depth:
 		float sampleDepth = texture(depthMap, offset.xy).r;
         
 		//range check & accumulate:
-		float range = abs(origin.z - sampleDepth) < rad ? 1.0f : 0.0f;
-        ao += (sampleDepth <= aosample.z ? 1.0f : 0.0f) * range;
+		float range = abs(origin.z - sampleDepth) < rad ? 1.0 : 0.0;
+        ao += (sampleDepth <= aosample.z ? 1.0 : 0.0) * range;
     }
 
-	ao = ao / 16.0f;
+	ao = 1.0 - (ao / 16.0);
 	
-	return ao * 2.0f;
+	return ao;
 }
 
 void main()
@@ -75,7 +76,8 @@ void main()
 	{
 		case 0: //final shading
 		{
-		    color = texture(colorMap, UV) * AmbientOcclusion();
+			float x = AmbientOcclusion();
+		    color = texture(colorMap, UV) * x;
 			break;
 		}
 		case 1: //show colorMap
@@ -100,18 +102,18 @@ void main()
 		}
 		case 5: //show depthMap
 		{
-		    color = vec4(texture(depthMap, UV).rgb, 1.0f);
+		    color = vec4(texture(depthMap, UV).rgb, 1.0);
 			break;
 		}
 		case 6: //show ssao
 		{
 			float x = AmbientOcclusion();
-		    color = vec4(x, x, x, 1.0f);
+		    color = vec4(x, x, x, 1.0);
 			break;
 		}
 		default:
 		{
-		    color = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+		    color = vec4(1.0, 0.0, 0.0, 1.0);
 			break;
 		}
 	}

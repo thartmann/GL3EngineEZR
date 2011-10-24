@@ -38,8 +38,8 @@ public:
 	void nodeRotate(GLfloat angle, glm::vec3 const &axis, GLuint tspace = TS_GLOBAL);
 
 	void Update();
-	void Render(GLint texLoc, GLint matLoc);
-	void Render(GLint texLoc, GLint matLoc, glm::mat4 const &transform);
+	void Render(GLint texLoc, GLint matLoc, GLint normalMatLoc, glm::mat4 viewMat);
+	void Render(GLint texLoc, GLint matLoc, glm::mat4 const &transform, GLint normalMatLoc, glm::mat4 viewMat);
 
 	//all transformations of this node should be represented by this matrix
 	glm::core::type::mat4 transform_local;

@@ -81,12 +81,11 @@ int LPVApp::Initialize(void)
 		scale = lerp(0.1f, 1.0f, scale * scale);
 		randVec *= scale;
 		m_sampleKernel[i] = randVec.x;
-		i++;
+		++i;
 		m_sampleKernel[i] = randVec.y;
-		i++;
+		++i;
 		m_sampleKernel[i] = randVec.z;
 	}
-
 
 	SetupScene();
 
@@ -104,7 +103,6 @@ int LPVApp::Initialize(void)
 
 void LPVApp::RenderScene(void)
 {
-
 	m_ls.updatePosition( m_lightArray, 1 );
 	m_ls.updateDirection( m_lightArray, 1 );
 
@@ -121,7 +119,7 @@ void LPVApp::RenderScene(void)
 	//GLint locus = glGetUniformLocation( m_LightInjectionShader->GetShaderID(), "megaLightArray");
 	//glUniform3fv( locus , m_ls.getCounter() * 4  , m_lightArray );
 
-	m_rootNode->Render(m_nodeTexLoc2, m_modelMatrixUniformLocation2);
+	m_rootNode->Render(m_nodeTexLoc2, m_modelMatrixUniformLocation2, m_lightNormalMatrixLoc, m_lightViewMatrix);
 
 	m_LightInjectionShader->UnBindShader();
 
@@ -137,6 +135,8 @@ void LPVApp::RenderScene(void)
 	GLint loc = glGetUniformLocation( m_shader->GetShaderID(), "m_lightArray");
 	glUniform3fv( loc , m_ls.getCounter() * 4  , m_lightArray );
 
+	glUniform1f(m_farPlaneLoc, m_Camera.getFar());
+	
 	glUniformMatrix4fv(m_viewMatrixUniformLocation, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(m_Camera.getView()));
 	glUniformMatrix4fv(m_projectionMatrixUniformLocation, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(m_Camera.getProjection()));
 	glUniformMatrix4fv(m_lightSpaceMatrixUniformLocation, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(m_lightSpaceMatrix));
@@ -147,8 +147,7 @@ void LPVApp::RenderScene(void)
 	glBindTexture(GL_TEXTURE_2D, m_light_mrt->getTexture(4));
 	glBindSampler(m_light_mrt->getTextureUnit(4), m_light_mrt->getSampler(4));
 
-
-	m_rootNode->Render(m_nodeTexLoc, m_modelMatrixUniformLocation);
+	m_rootNode->Render(m_nodeTexLoc, m_modelMatrixUniformLocation, m_normalMatrixLoc, m_Camera.getView());
 	m_shader->UnBindShader();
 
 	//FULLSCREENQUAD
@@ -166,6 +165,7 @@ void LPVApp::RenderScene(void)
 	m_outputShader->BindShader();
 
 	glUniformMatrix4fv(m_projMatForSSAOLoc, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(m_Camera.getProjection()));
+	glUniformMatrix4fv(m_viewMatForSSAOLoc, 1, GL_FALSE, glm::gtc::type_ptr::value_ptr(m_Camera.getView()));
 
 	//switch to tell shader wich texture to render
 	glUniform1i(m_outputSwitch, rtID);
@@ -290,6 +290,9 @@ void LPVApp::SetupScene(void)
 	m_shader = new Shader("./shader/gatherVP.vert", "./shader/gatherFP.frag");
 	m_shader->BindShader();
 
+	m_farPlaneLoc = glGetUniformLocation(m_shader->GetShaderID(), "farPlane");
+	m_normalMatrixLoc = glGetUniformLocation(m_shader->GetShaderID(), "normalMat");
+
    	m_modelMatrixUniformLocation = glGetUniformLocation(m_shader->GetShaderID(), "ModelMatrix");
 	m_viewMatrixUniformLocation = glGetUniformLocation(m_shader->GetShaderID(), "ViewMatrix");
 	m_projectionMatrixUniformLocation = glGetUniformLocation(m_shader->GetShaderID(), "ProjectionMatrix");
@@ -313,6 +316,8 @@ void LPVApp::SetupScene(void)
 	m_lightProjectionMatrixUniformLocation = glGetUniformLocation(m_LightInjectionShader->GetShaderID(), "LightProjectionMatrix");
 	m_nodeTexLoc2 = glGetUniformLocation(m_shader->GetShaderID(), "meshtexture");
 
+	m_lightNormalMatrixLoc = glGetUniformLocation(m_LightInjectionShader->GetShaderID(), "normalMat");
+
 	m_LightInjectionShader->UnBindShader();
 
 	//OUTPUTSHADER
@@ -321,6 +326,9 @@ void LPVApp::SetupScene(void)
 	//get matrix location
 	m_projMatForSSAOLoc = glGetUniformLocation(m_outputShader->GetShaderID(), "projMat");
 	CheckOpenGLError("getting projMatForSSAO uniform location");
+
+	m_viewMatForSSAOLoc = glGetUniformLocation(m_outputShader->GetShaderID(), "viewMat");
+	CheckOpenGLError("getting viewMatForSSAO uniform location");
 
 	//get texture locations
 	m_colorMapLocation = glGetUniformLocation(m_outputShader->GetShaderID(), "colorMap");

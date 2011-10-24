@@ -7,6 +7,6 @@ layout(location = 3) in vec3 vertexPosition;
 out vec2 UV;
 
 void main(){
-	gl_Position =  vec4(vertexPosition, 1.0f);
-	UV = (vertexPosition.xy) * 0.5f + vec2(0.5f, 0.5f);
+	gl_Position =  vec4(vertexPosition, 1.0);
+	UV = (vertexPosition.xy) * 0.5 + vec2(0.5, 0.5);
 }

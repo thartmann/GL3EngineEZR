@@ -101,6 +101,9 @@ class LPVApp
 		glm::core::type::mat4 m_lightViewMatrix;
 		glm::core::type::mat4 m_lightProjectionMatrix;
 		glm::core::type::mat4 m_lightSpaceMatrix;
+		
+		GLuint m_normalMatrixLoc;
+		GLuint m_lightNormalMatrixLoc;
 
 		int rtID;
 
@@ -127,6 +130,9 @@ class LPVApp
 		GLuint m_sampleKernelLoc;
 
 		GLuint m_projMatForSSAOLoc;
+		GLuint m_viewMatForSSAOLoc;
+
+		GLuint m_farPlaneLoc;
 		
 		float *m_lightArray;
 };
